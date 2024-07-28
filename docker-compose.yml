@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: "bitnami/kafka:latest"
+    ports:
+      - "9093:9093"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+    depends_on:
+      - zookeeper
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: crypto-streams
+  producer:
+    build: ./go-stream-producer
+    depends_on:
+      - kafka
+    environment:
+      - WS_SCHEME=${WS_SCHEME}
+      - WS_ADDR=${WS_ADDR}
+      - WS_PATH=${WS_PATH}
+      - WS_ORIGIN_HEADER=${WS_ORIGIN_HEADER}
+      - PAIRS=${PAIRS}
+      - KAFKA_SERVER_ADDR=${KAFKA_SERVER_ADDR}
+  persister:
+    build: ./go-persister
+    depends_on:
+      - mongo
+    environment:
+      - PAIRS=${PAIRS}
+      - KAFKA_SERVER_ADDR=${KAFKA_SERVER_ADDR}
+      - KAFKA_GROUP_ID=${KAFKA_GROUP_ID_PERSISTER}
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_COLL=${MONGO_COLL}
+  rest-server:
+    build: ./go-rest-server
+    depends_on:
+      - mongo
+    ports:
+      - "${REST_PORT}:${REST_PORT}"
+    environment:
+      - PORT=${REST_PORT}
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_COLL=${MONGO_COLL}
+  ws-server:
+    build: ./node-ws-server
+    depends_on:
+      - kafka
+    ports:
+      - "${WS_PORT}:${WS_PORT}"
+    environment:
+      - KAFKA_SERVER_ADDR=${KAFKA_SERVER_ADDR}
+      - KAFKA_GROUP_ID=${KAFKA_GROUP_ID_WS}
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - PAIRS=${PAIRS}
+      - PORT=${WS_PORT}
