@@ -1,6 +1,7 @@
-# crypto-streams
+# Crypto-Coin-Flow-Broker
 
-A Go/Node project that receives a stream of cryptocurrency data from an external websocket api, and publishes them to a Kafka broker. The messages are then subscribed to by a set of clients. The services are connected using Docker.
+A Go/Node project that receives a stream of cryptocurrency data from an external websocket api, and publishes them to a Kafka broker.
+The messages are then subscribed to by a set of clients. The services are connected using Docker.
 
 ## Components
 
@@ -105,4 +106,3 @@ A Go/Node project that receives a stream of cryptocurrency data from an external
 - https://github.com/websockets/ws#simple-server
 - https://github.com/bitnami/bitnami-docker-kafka/blob/master/README.md
 - https://www.websocket.org/echo.html
-"# Cypto-Coin-Flow-Broker" 
