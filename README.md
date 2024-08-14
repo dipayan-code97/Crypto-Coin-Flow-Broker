@@ -5,10 +5,10 @@ The messages are then subscribed to by a set of clients. The services are connec
 
 ## Components
 
-- [x] A stream producer in Go: subscribes to an external WS stream, reformats it, and publishes it to a Kafka broker
-- [x] A web socket server in Node: subscribes to the Kafka stream, and serves the stream through a websocket connection
-- [x] A persister in Go: subscribes to the Kafka stream, and persists the data in MongoDB
-- [x] A REST API server in Go: queries the MongoDB and allows access to its data through a REST API
+-  A stream producer in Go: subscribes to an external WS stream, reformats it, and publishes it to a Kafka broker
+-  A web socket server in Node: subscribes to the Kafka stream, and serves the stream through a websocket connection
+-  A persister in Go: subscribes to the Kafka stream, and persists the data in MongoDB
+-  A REST API server in Go: queries the MongoDB and allows access to its data through a REST API
 
 ## Note
 
