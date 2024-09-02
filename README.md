@@ -95,14 +95,3 @@ The messages are then subscribed to by a set of clients. The services are connec
   }
 ]
 ```
-
-## Resources
-
-- https://exchange.blockchain.com/api/#websocket-api
-- https://github.com/confluentinc/confluent-kafka-go
-- https://kafka.apache.org/quickstart
-- https://www.npmjs.com/package/kafkajs
-- https://github.com/gorilla/websocket
-- https://github.com/websockets/ws#simple-server
-- https://github.com/bitnami/bitnami-docker-kafka/blob/master/README.md
-- https://www.websocket.org/echo.html
